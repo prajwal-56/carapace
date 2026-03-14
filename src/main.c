@@ -1,30 +1,48 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sched.h>
 #include <sys/wait.h>
+#include <signal.h>
 
-int main(int argc, char *argv[] ){
+#define STACK_SIZE (1024 * 1024)
 
-    if(argc < 2){
+int childStuff(void *arg)
+{
+    char **argv = (char **)arg; // casts the array back into string array
+
+    printf("\nthe PID of Child : %d\n", getpid());
+
+    // To execute that command (user's command)
+    execvp(argv[1], &argv[1]);
+
+    perror("something went wrong :(");
+    return 1;
+}
+
+int main(int argc, char *argv[])
+{
+
+    char *stack = malloc(STACK_SIZE);
+
+    if (argc < 2)
+    {
         printf("huh !? pass some argunents (likely a bin file or smth like that )");
-    } else {
-        pid_t pid = fork();     
+    }
+    else
+    {
+        pid_t pid = clone(childStuff, stack + STACK_SIZE, SIGCHLD, argv);
 
-        if (pid == -1){
+        if (pid == -1)
+        {
             perror("something went wrong. Forking Failed :(");
             return 1;
         }
 
-        if (pid == 0){      // A fork has been succesfully created
-            execvp(argv[1] , &argv[1]);
-
-            perror("Something went wrong (most likely execvp)");
-            exit(1);
-        } else {
-            wait(NULL);
-            printf("\nVoila !!!\n");
-        }
+        wait(NULL);
+        printf("\nVoila !!!\n");
+        free(stack);
     }
 
     return 0;
