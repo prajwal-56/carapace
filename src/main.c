@@ -17,6 +17,8 @@ int childStuff(void *arg)
     // To execute that command (user's command)
     execvp(argv[1], &argv[1]);
 
+
+	// these never works if execvp() succesfully replaced this program with other
     perror("something went wrong :(");
     return 1;
 }
@@ -26,16 +28,12 @@ int main(int argc, char *argv[])
 
     char *stack = malloc(STACK_SIZE);
 
-    if (argc < 2)
-    {
+    if (argc < 2){
         printf("huh !? pass some argunents (likely a bin file or smth like that )");
-    }
-    else
-    {
+    } else {
         pid_t pid = clone(childStuff, stack + STACK_SIZE, SIGCHLD, argv);
 
-        if (pid == -1)
-        {
+        if (pid == -1){
             perror("something went wrong. Forking Failed :(");
             return 1;
         }
