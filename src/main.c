@@ -32,7 +32,7 @@
 
         // writing into cgroup.procs
         FILE *cgroupProcsFp = fopen(cgroup_procs_path, "w");
-        if( cgroup_procs_path == NULL){
+        if( cgroupProcsFp == NULL){
             perror("Couldn't open **cgroup.procs** file. Try running with sudo :(");
             return;
         }
