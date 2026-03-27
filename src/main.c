@@ -9,30 +9,18 @@
 #include <fcntl.h>
 #include "cgroups.h"
 #include "namespaces.h"
+#include "container.h"
 
 #define STACK_SIZE (1024 * 1024)
 
 int main(int argc, char *argv[]){
 
-    char *stack = malloc(STACK_SIZE);
-
-    if (argc < 2){
-        printf("huh !? pass some argunents (likely a bin file or smth like that )");
-    } else {
-        pid_t pid = clone(childStuff, stack + STACK_SIZE, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | SIGCHLD, argv);
-
-        if (pid == -1){
-            perror("something went wrong. Forking Failed :(");
-            return 1;
-        }
-
-        printf("---- cgroup thing working -----\n" );
-        printf("---- creating cgroup.memory.max - allocating 56MB -----\n" );
-        cgroups_init(pid, 56000000); // 56 MB)
-        wait(NULL);
-        printf("\nVoila !!!\n");
-        free(stack);
+    if(argc < 2){
+        fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
+        return 1;
     }
+
+    container_init(argc, argv);
 
     return 0;
 }

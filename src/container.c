@@ -1,0 +1,49 @@
+#define _GNU_SOURCE
+#include "cgroups.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sched.h>
+#include <sys/wait.h>
+#include <signal.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include "cgroups.h"
+#include "namespaces.h"
+#include "container.h"
+
+#define STACK_SIZE (1024 * 1024)
+
+void container_init(int argc, char *argv[]){
+    char *stack = malloc(STACK_SIZE);
+    long int memory_limit = atol(argv[2]);
+
+    if (argc < 3){
+        fprintf(stderr, "Usage: %s <command> <memory_limit_in_bytes>\n", argv[0]);
+        return;
+    }
+    
+    if (memory_limit <= 0){
+        fprintf(stderr, "Please provide a valid memory limit in bytes :(\n");
+        return;
+    
+    }
+    if (argc < 2){
+        fprintf(stderr, "Please provide a command to execute :(\n");
+        return;
+    }
+    pid_t pid = clone(childStuff, stack + STACK_SIZE, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | SIGCHLD, argv);
+
+    if (pid == -1){
+        perror("something went wrong. Forking Failed :(");
+        return;
+    }
+
+    printf("---- creating cgroup.memory.max -----\n" );
+    cgroups_init(pid, memory_limit);
+    wait(NULL);
+    printf("\nVoila !!!\n");
+    free(stack);
+
+    // cgroups_init(pid, memory_limit);
+}
