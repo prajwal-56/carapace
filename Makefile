@@ -4,7 +4,7 @@ TARGET = ./build/carapace 			# this is where the binaries goes
 
 all: src/main.c
 	@mkdir -p build
-	$(CC) $(CFLAGS) src/main.c src/cgroups.c -o $(TARGET)
+	$(CC) $(CFLAGS) src/main.c src/cgroups.c src/namespaces.c -o $(TARGET)
 
 
 clean:

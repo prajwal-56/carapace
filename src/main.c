@@ -8,21 +8,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "cgroups.h"
+#include "namespaces.h"
 
 #define STACK_SIZE (1024 * 1024)
-
-int childStuff(void *arg)
-{
-    char **argv = (char **)arg; // casts the array back into string array
-
-    printf("\nthe PID of Child : %d\nParent ID : %d", getpid(), getppid());
-
-    // To execute that command (user's command)
-    execvp(argv[1], &argv[1]);
-
-    perror("something went wrong :(");
-    return 1;
-}
 
 int main(int argc, char *argv[]){
 
