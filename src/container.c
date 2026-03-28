@@ -16,13 +16,13 @@
 
 void container_init(int argc, char *argv[]){
     char *stack = malloc(STACK_SIZE);
-    long int memory_limit = atol(argv[2]);
 
     if (argc < 3){
         fprintf(stderr, "Usage: %s <command> <memory_limit_in_bytes>\n", argv[0]);
         return;
     }
-    
+
+    long int memory_limit = atol(argv[1]);   
     if (memory_limit <= 0){
         fprintf(stderr, "Please provide a valid memory limit in bytes :(\n");
         return;
@@ -45,5 +45,5 @@ void container_init(int argc, char *argv[]){
     printf("\nVoila !!!\n");
     free(stack);
 
-    // cgroups_init(pid, memory_limit);
+    cgroups_cleanup();
 }
