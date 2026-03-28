@@ -4,4 +4,5 @@
 
 void cgroups_init(pid_t pid, long memory_limit_in_bytes);
 
+void cgroups_cleanup();
 #endif
