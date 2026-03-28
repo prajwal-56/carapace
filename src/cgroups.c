@@ -9,7 +9,7 @@
 void cgroups_init(pid_t pid, long memory_limit_in_bytes){
 
     // create a new cgroup directory for the container
-    mkdir("/sys/fs/cgroup/carapace", 0755);
+    (mkdir("/sys/fs/cgroup/carapace", 0755) == 0) ? printf("\n---- created cgroups ----\n") : printf("\n---- failed to create cgroups or already exists (try with sudo)----\n");
 
     const char *memory_max_path = "/sys/fs/cgroup/carapace/memory.max";
     const char *cgroup_procs_path = "/sys/fs/cgroup/carapace/cgroup.procs";
@@ -34,4 +34,10 @@ void cgroups_init(pid_t pid, long memory_limit_in_bytes){
     fprintf(cgroupProcsFp , "%d", pid);
     fclose(cgroupProcsFp);
     printf("---- added PID %d to %s -----\n", pid , cgroup_procs_path);
+
+}
+
+void cgroups_cleanup(){
+    printf("\n---- cleaning up ----\n");
+    rmdir("/sys/fs/cgroup/carapace") == 0 ? printf("---- removed cgroups ----\n") : printf("---- failed to remove cgroups. Try running with sudo :(\n");
 }
