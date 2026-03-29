@@ -11,11 +11,23 @@ int childStuff(void *arg){
 
     printf("\nthe PID of Child : %d\nParent ID : %d", getpid(), getppid());
 
-    chroot("/rootfs"); // changes the root directory to the new rootfs folder
-    chdir("/"); // changes the current working directory to the new root
-    
+    // changes the root directory to the new rootfs folder
+    if (chroot("rootfs") != 0) {
+        printf("chroot failed :(\n");
+        return 1;
+    }else{
+        printf("\n---- chroot successfull ----\n");
+    }
+
+    // changes the current working directory to the new root
+    if (chdir("/") != 0) {
+        printf("chdir failed :(\n");
+        return 1;
+    } else{
+        printf("\n---- changed root directory to rootfs ----\n");
+    }
     // To execute that command (user's command)
-    execvp(argv[1], &argv[1]);
+    execvp(argv[2], &argv[2]);
 
     perror("something went wrong :(\n");
     return 1;
