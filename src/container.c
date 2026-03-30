@@ -38,7 +38,7 @@ void container_init(int argc, char *argv[]){
     childArgs.argv = argv;
     pipe(childArgs.pipefd); // create a pipe for synchronization
     
-    pid_t pid = clone(childStuff, stack + STACK_SIZE, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | SIGCHLD, &child_args_t);
+    pid_t pid = clone(childStuff, stack + STACK_SIZE, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | SIGCHLD, &childArgs);
 
     if (pid == -1){
         perror("something went wrong. Forking Failed :(");
