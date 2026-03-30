@@ -5,11 +5,19 @@
 #include <unistd.h>
 #include <sched.h>
 #include "namespaces.h"
+#include "container.h"
 
 int childStuff(void *arg){
-    char **argv = (char **)arg; // casts the array back into string array
+    child_args_t *childArgs = (child_args_t *)arg; // casts the argument to the child_args_t struct
+    char **argv = childArgs->argv; 
 
     printf("\nthe PID of Child : %d\nParent ID : %d", getpid(), getppid());
+
+    printf("\nWaiting for the parent to finish the cgroups_init...\n"); 
+    char buffer[6];
+    read(childArgs->pipefd[0], buffer, 5); // when the parent finishes setup , this continues....
+
+    printf("\n---- parent setup complete ----\n");
 
     // changes the root directory to the new rootfs folder
     if (chroot("rootfs") != 0) {
