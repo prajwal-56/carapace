@@ -14,6 +14,7 @@
 
 #define STACK_SIZE (1024 * 1024)
 
+
 void container_init(int argc, char *argv[]){
     char *stack = malloc(STACK_SIZE);
 
@@ -32,6 +33,10 @@ void container_init(int argc, char *argv[]){
         fprintf(stderr, "Please provide a command to execute :(\n");
         return;
     }
+
+    // int pipefd[2]; // File Descriptors for the pipe. to prevent a race condition between parent and child process
+    // pipe(pipefd);
+    
     pid_t pid = clone(childStuff, stack + STACK_SIZE, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | SIGCHLD, argv);
 
     if (pid == -1){
@@ -41,6 +46,9 @@ void container_init(int argc, char *argv[]){
 
     printf("---- creating cgroup.memory.max -----\n" );
     cgroups_init(pid, memory_limit);
+
+    // write(pipefd[1], "ready", 5); // signal the child process to continue after setting up cgroups
+
     wait(NULL);
     printf("\nVoila !!!\n");
     free(stack);
