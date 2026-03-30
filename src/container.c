@@ -34,10 +34,11 @@ void container_init(int argc, char *argv[]){
         return;
     }
 
-    // int pipefd[2]; // File Descriptors for the pipe. to prevent a race condition between parent and child process
-    // pipe(pipefd);
+    child_args_t childArgs;
+    childArgs.argv = argv;
+    pipe(childArgs.pipefd); // create a pipe for synchronization
     
-    pid_t pid = clone(childStuff, stack + STACK_SIZE, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | SIGCHLD, argv);
+    pid_t pid = clone(childStuff, stack + STACK_SIZE, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | SIGCHLD, &child_args_t);
 
     if (pid == -1){
         perror("something went wrong. Forking Failed :(");
