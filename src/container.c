@@ -15,27 +15,27 @@
 #define STACK_SIZE (1024 * 1024)
 
 
-void container_init(int argc, char *argv[]){
+void container_init( long memory_limit, char **cmds){
     char *stack = malloc(STACK_SIZE);
 
-    if (argc < 3){
-        fprintf(stderr, "Usage: %s <command> <memory_limit_in_bytes>\n", argv[0]);
-        return;
-    }
+    // if (argc < 3){
+    //     fprintf(stderr, "Usage: %s <command> <memory_limit_in_bytes>\n", argv[0]);
+    //     return;
+    // }
 
-    long int memory_limit = atol(argv[1]);   
+    // long int memory_limit = atol(argv[1]);   
     if (memory_limit <= 0){
         fprintf(stderr, "Please provide a valid memory limit in bytes :(\n");
         return;
     
     }
-    if (argc < 2){
-        fprintf(stderr, "Please provide a command to execute :(\n");
-        return;
-    }
+    // if (argc < 2){
+    //     fprintf(stderr, "Please provide a command to execute :(\n");
+    //     return;
+    // }
 
     child_args_t childArgs;
-    childArgs.argv = argv;
+    childArgs.cmds = cmds; // set the commands to execute in the child process
     pipe(childArgs.pipefd); // create a pipe for synchronization
     
     pid_t pid = clone(childStuff, stack + STACK_SIZE, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | SIGCHLD, &childArgs);

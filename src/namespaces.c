@@ -9,7 +9,7 @@
 
 int childStuff(void *arg){
     child_args_t *childArgs = (child_args_t *)arg; // casts the argument to the child_args_t struct
-    char **argv = childArgs->argv; 
+    // char **argv = childArgs->cmds; 
 
     printf("\nthe PID of Child : %d\nParent ID : %d", getpid(), getppid());
 
@@ -35,7 +35,7 @@ int childStuff(void *arg){
         printf("\n---- changed root directory to rootfs ----\n");
     }
     // To execute that command (user's command)
-    execvp(argv[2], &argv[2]);
+    execvp( childArgs->cmds[0] , childArgs->cmds);
 
     perror("something went wrong :(\n");
     return 1;
