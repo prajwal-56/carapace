@@ -45,13 +45,13 @@ void container_init( long memory_limit, char **cmds){
         return;
     }
 
-    printf("---- creating cgroup.memory.max -----\n" );
+    // printf("---- creating cgroup.memory.max -----\n" );
     cgroups_init(pid, memory_limit);
 
     write(childArgs.pipefd[1], "ready", 5); // signal the child process to continue after setting up cgroups
 
     wait(NULL);
-    printf("\nVoila !!!\n");
+    // printf("\nVoila !!!\n");
     free(stack);
 
     cgroups_cleanup();
