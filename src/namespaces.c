@@ -22,7 +22,7 @@ int childStuff(void *arg){
 
     // changes the root directory to the new rootfs folder
     if (chroot("rootfs") != 0) {
-        printf("chroot failed :(\n");
+        perror("chroot failed :(\n");
         return 1;
     }else{
         // printf("\n---- chroot successfull ----\n");
@@ -37,7 +37,6 @@ int childStuff(void *arg){
     }
     // To execute that command (user's command)
     execvp( childArgs->cmds[0] , childArgs->cmds);
-
-    perror("something went wrong :(\n");
+    perror("something went wrong (probably execvp failed):(\n");
     return 1;
 }
