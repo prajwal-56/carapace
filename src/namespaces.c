@@ -36,7 +36,12 @@ int childStuff(void *arg){
         // printf("\n---- changed root directory to rootfs ----\n");
     }
     // To execute that command (user's command)
-    execvp( childArgs->cmds[0] , childArgs->cmds);
+    if ( childArgs->cmds[0] == NULL){
+        char *shell[] = { "/bin/sh" , NULL};
+        execvp( shell[0] , shell );
+    } else {
+        execvp( childArgs->cmds[0] , childArgs->cmds);
+    }
     perror("something went wrong (probably execvp failed):(\n");
     return 1;
 }
