@@ -77,9 +77,9 @@ void container_init( long memory_limit, char **cmds){
     // }
     // fclose(f);
     wait(NULL);
-    // printf("\nVoila !!!\n");
-    free(stack);
-
 
     cgroups_cleanup();
+
+    free(stack);
+
 }
