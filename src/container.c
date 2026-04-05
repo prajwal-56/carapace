@@ -55,10 +55,11 @@ void container_init( long memory_limit, char **cmds){
     waitpid(pid , &status , 0);
 
     if (WIFSIGNALED(status)){  // WIFSIGNALED(status) - whether it got terminated by signal  
-        if (WTERMSIG(status) == SIGKILL ){
+        int signal = WTERMSIG(status);
+        if (signal == SIGKILL ){
             fprintf(stderr, "[carapace] the container likely got (OOM)killed \n");
         } else {
-            fprintf(stderr , "uhh...")
+            fprintf(stderr , "The container got killed by signal %d\n", signal);
         }
     }
 
