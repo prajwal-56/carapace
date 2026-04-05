@@ -7,6 +7,6 @@ typedef struct {
 } child_args_t;
 
 
-void container_init(long memory_limit, char **cmd);
+void container_init(long memory_limit, char **cmd , char *root);
 
 #endif

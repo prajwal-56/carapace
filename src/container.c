@@ -15,7 +15,7 @@
 #define STACK_SIZE (1024 * 1024)
 
 
-void container_init( long memory_limit, char **cmds){
+void container_init( long memory_limit, char **cmds , char *root){
     char *stack = malloc(STACK_SIZE);
 
     // if (argc < 3){
@@ -27,8 +27,8 @@ void container_init( long memory_limit, char **cmds){
     if (memory_limit <= 0){
         fprintf(stderr, "Please provide a valid memory limit in bytes :(\n");
         return;
-    
     }
+    
     // if (argc < 2){
     //     fprintf(stderr, "Please provide a command to execute :(\n");
     //     return;
