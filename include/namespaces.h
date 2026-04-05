@@ -1,5 +1,5 @@
 #ifndef NAMESPACES_H
 #define NAMESPACES_H
 
-int childStuff(void *arg , char *root);
+int childStuff(void *arg);
 #endif

@@ -7,7 +7,7 @@
 #include "namespaces.h"
 #include "container.h"
 
-int childStuff(void *arg , char *root){
+int childStuff(void *arg){
     child_args_t *childArgs = (child_args_t *)arg; // casts the argument to the child_args_t struct
     // char **argv = childArgs->cmds; 
 
@@ -21,7 +21,7 @@ int childStuff(void *arg , char *root){
     // printf("\n---- parent setup complete ----\n");
 
     // changes the root directory to the new rootfs folder
-    if (chroot(root) != 0) {
+    if (chroot( childArgs->root ) != 0) {
         perror("chroot failed :(\n");
         return 1;
     }else{

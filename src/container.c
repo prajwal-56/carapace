@@ -36,6 +36,7 @@ void container_init( long memory_limit, char **cmds , char *root){
 
     child_args_t childArgs;
     childArgs.cmds = cmds; // set the commands to execute in the child process
+    childArgs.root = root; 
     pipe(childArgs.pipefd); // create a pipe for synchronization
     
     pid_t pid = clone(childStuff, stack + STACK_SIZE, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | SIGCHLD, &childArgs);
