@@ -50,9 +50,35 @@ void container_init( long memory_limit, char **cmds){
 
     write(childArgs.pipefd[1], "ready", 5); // signal the child process to continue after setting up cgroups
 
+
+    int status; // for : How the child process terminated
+    waitpid(pid , &status , 0);
+
+    if (WIFSIGNALED(status)){  // WIFSIGNALED(status) - whether it got terminated by signal  
+        if (WTERMSIG(status) == SIGKILL ){
+            fprintf(stderr, "[carapace] the container likely got (OOM)killed \n");
+        } else {
+            fprintf(stderr , "uhh...")
+        }
+    }
+
+    // TO confirm whether the child really got OOM killed - check the memory.events file for oom_kill count 
+    // FILE *f = fopen("/sys/fs/cgroup/carapace/memory.events", "r");
+    // char line[256];
+    // while (fgets(line, sizeof(line), f)) {
+    //     if (strncmp(line, "oom_kill", 8) == 0) {
+    //         // parse the count after "oom_kill <N>"
+    //         int count;
+    //         sscanf(line, "oom_kill %d", &count);
+    //         if (count > 0)
+    //             fprintf(stderr, "[carapace] OOM confirmed: %d process(es) killed\n", count);
+    //     }
+    // }
+    // fclose(f);
     wait(NULL);
     // printf("\nVoila !!!\n");
     free(stack);
+
 
     cgroups_cleanup();
 }
