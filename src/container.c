@@ -76,8 +76,6 @@ void container_init( long memory_limit, char **cmds){
     //     }
     // }
     // fclose(f);
-    wait(NULL);
-
     cgroups_cleanup();
 
     free(stack);
