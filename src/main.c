@@ -26,6 +26,13 @@ long parse_mem(char *s){
 
 int main(int argc, char *argv[]){
 
+
+    if(argc < 2){
+        fprintf(stderr, "Usage: %s --mem <limit>M [ --root <path>] <command> [args...]\n", argv[0]);
+        return 1;
+    }
+
+
     long memory_limit = 0;
     char *root = "rootfs"; // default root dir
     char **cmds = NULL;
@@ -41,22 +48,22 @@ int main(int argc, char *argv[]){
         }
     }
 
-    if(argc < 2){
-        fprintf(stderr, "Usage: %s --mem <limit>M [ --root <path>] <command> [args...]\n", argv[0]);
-        return 1;
-    }
-
     // checking whether root is valid directory or not
     struct stat st;
-    if (stat(root , &st) !=0 || !S_ISDIR(st.st_mode)){
-        fprintf(stderr, "Invalid root directory: %s\n", root);
+    if(stat(root, &st) != 0 || !S_ISDIR(st.st_mode)){
+        fprintf( stderr, "[carapace] : %s isn't a valid directory \n" , root);
         return 1;
-    }
+    }   
+
+
 
     char sh_path[512];
     snprintf(sh_path, sizeof(sh_path), "%s/bin/sh", root);
-    if(access(sh_path, X_OK) != 0){
-        fprintf(stderr, "[carapace ]: %s doesn't look like a valid folder (no /bin/sh\n", sh_path);
+    fprintf(stderr, "debug: root='%s' sh_path='%s'\n", root, sh_path);
+
+    struct stat lst;
+    if( lstat(sh_path , &lst) != 0){
+        fprintf( stderr, "[carpace] : no /bin/sh found in %s \n" , root);
         return 1;
     }
 
