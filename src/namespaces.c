@@ -8,7 +8,7 @@
 #include "container.h"
 
 int childStuff(void *arg){
-    child_args_t *childArgs = (child_args_t *)arg; // casts the argument to the child_args_t struct
+    child_args_t *childArgs = (child_args_t *)arg; // casts the argument to the child_args_t struct    
     // char **argv = childArgs->cmds; 
 
     // printf("\nthe PID of Child : %d\nParent ID : %d", getpid(), getppid());
@@ -36,7 +36,7 @@ int childStuff(void *arg){
         // printf("\n---- changed root directory to rootfs ----\n");
     }
     // To execute that command (user's command)
-    if ( childArgs->cmds[0] == NULL){
+    if ( childArgs->cmds == NULL){
         char *shell[] = { "/bin/sh" , NULL};
         execvp( shell[0] , shell );
     } else {

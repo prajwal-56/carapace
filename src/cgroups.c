@@ -23,7 +23,7 @@ void cgroups_init(pid_t pid, long memory_limit_in_bytes){
     
     fprintf(memMaxFp, "%ld", memory_limit_in_bytes);    
     fclose(memMaxFp);
-    printf("\nmemory limit : %ld bytes", memory_limit_in_bytes);
+    printf("\nmemory limit : %ld bytes\n", memory_limit_in_bytes);
     // printf("---- modified %s -----\n", memory_max_path);
 
     // writing into cgroup.procs
